@@ -12,7 +12,7 @@ To isolate a certain rule for testing, make sure the `configFile` you pass in on
 
 The `testFile` should look like this:
 
-```
+```js
 module.exports = {
 	valid: [
 		"a === b",

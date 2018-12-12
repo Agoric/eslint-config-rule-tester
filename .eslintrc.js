@@ -1,7 +1,8 @@
 module.exports = {
   "extends": "airbnb",
   "env": {
-    "es6": true
+    "es6": true,
+    "mocha": true
   },
   "rules": {
     "implicit-arrow-linebreak": "off",

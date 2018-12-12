@@ -7,7 +7,6 @@
 
 const assert = require('assert');
 const eslint = require('eslint');
-const { describe, it } = require('mocha');
 
 const configTester = (ruleName, configFile, testFile) => {
   const cli = new eslint.CLIEngine(configFile);
@@ -61,7 +60,7 @@ const configTester = (ruleName, configFile, testFile) => {
     );
     actualErrorMsgs.forEach((_, index) =>
       compareSingleErrorMessageToExpected(
-        actualErrorMsgs[index],
+        actualErrorMsgs[index].message,
         expectedErrorMsgs[index],
       ),
     );

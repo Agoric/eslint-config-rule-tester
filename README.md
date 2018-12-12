@@ -14,15 +14,15 @@ The `testFile` should look like this:
 
 ```
 module.exports = {
-	valid: [
-		"a === b",
-	],
-	invalid: [
-		{
-			code: "if (x == 42) { }",
-			errors: ["Expected '===' and instead saw '=='."]
-		},
-	]
+  valid: [
+    "a === b",
+  ],
+  invalid: [
+    {
+      code: "if (x == 42) { }",
+      errors: ["Expected '===' and instead saw '=='."]
+    },
+  ]
 };
 ```
 

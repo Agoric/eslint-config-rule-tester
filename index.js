@@ -59,10 +59,12 @@ const configTester = (ruleName, configFile, testFile) => {
         expectedErrorMsgs.length === 1 ? '' : 's'
       } but had ${actualErrorMsgs.length}: \n${actualErrorMsgs}`,
     );
-    actualErrorMsgs.forEach((_, index) => compareSingleErrorMessageToExpected(
-      actualErrorMsgs[index],
-      expectedErrorMsgs[index],
-    ));
+    actualErrorMsgs.forEach((_, index) =>
+      compareSingleErrorMessageToExpected(
+        actualErrorMsgs[index],
+        expectedErrorMsgs[index],
+      ),
+    );
   };
 
   /**

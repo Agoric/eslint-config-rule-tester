@@ -5,97 +5,106 @@
  * @author Agoric
  */
 
-
-"use strict";
-
 const assert = require('assert');
 const eslint = require('eslint');
 
-module.exports = {
-	configTester: (ruleName, configFile, testFile) => {
-		const cli = new eslint.CLIEngine(configFile);
+const configTester = (ruleName, configFile, testFile) => {
+  const cli = new eslint.CLIEngine(configFile);
 
-		/**
-		 * Check if the template is valid or not
-		 * all valid cases go through this
-		 * @param {string} text to run the rule against
-		 * @returns {void}
-		 * @private
-		 */
-		function testValidTemplate(text) {
+  /**
+   * Check if the template is valid or not
+   * all valid cases go through this
+   * @param {string} text to run the rule against
+   * @returns {void}
+   * @private
+   */
+  const testValidTemplate = (text) => {
+    const report = cli.executeOnText(text);
+    const errorCount = report.results.reduce(
+      (count, result) => count + result.errorCount,
+      0,
+    );
 
-			const report = cli.executeOnText(text);
-			const errorCount = report.results.reduce((count, result) => count + result.errorCount, 0);
+    assert.strictEqual(
+      errorCount,
+      0,
+      `Should have no errors but had ${errorCount}:\n${report.results}`,
+    );
+  };
 
-			assert.strictEqual(
-				errorCount, 0,
-				`Should have no errors but had ${errorCount}:\n${report.results}`
-			);
-		}
+  const compareSingleErrorMessageToExpected = (
+    actualErrorMsg,
+    expectedErrorMsg,
+  ) => {
+    assert(
+      typeof expectedErrorMsg === 'string',
+      `Error should be a string, but found (${expectedErrorMsg})`,
+    );
+    assert(
+      !actualErrorMsg.fatal,
+      `A fatal parsing error occurred: ${actualErrorMsg.message}`,
+    );
+    assert.strictEqual(actualErrorMsg, expectedErrorMsg);
+  };
 
-		/**
-		 * Check if the template is invalid or not
-		 * all invalid cases go through this.
-		 * @param {Object} item Item to run the rule against
-		 * @returns {void}
-		 * @private
-		 */
-		function testInvalidTemplate(item) {
-			assert.ok(item.errors || item.errors === 0,
-				`Did not specify errors for an invalid test`);
+  const compareErrorMessagesToExpected = (
+    actualErrorMsgs,
+    expectedErrorMsgs,
+  ) => {
+    assert.strictEqual(
+      actualErrorMsgs.length,
+      expectedErrorMsgs.length,
+      `Should have ${expectedErrorMsgs.length} error${
+        expectedErrorMsgs.length === 1 ? '' : 's'
+      } but had ${actualErrorMsgs.length}: \n${actualErrorMsgs}`,
+    );
+    actualErrorMsgs.forEach((_, index) =>
+      compareSingleErrorMessageToExpected(
+        actualErrorMsgs[index].message,
+        expectedErrorMsgs[index],
+      ),
+    );
+  };
 
-			const report = cli.executeOnText(item.code);
-			for (const result of report.results) {
-				const messages = result.messages;
-				assert.strictEqual(
-					messages.length, item.errors.length,
-					`Should have ${item.errors.length} error${item.errors.length === 1 ? "" : "s"} but had ${messages.length}: \n${messages}`
-				);
-				for (let i = 0, l = item.errors.length; i < l; i++) {
-					const error = item.errors[i];
-					const message = messages[i];
+  /**
+   * Check if the template is invalid or not
+   * all invalid cases go through this.
+   * @param {Object} item Item to run the rule against
+   * @returns {void}
+   * @private
+   */
+  const testInvalidTemplate = (item) => {
+    assert.ok(
+      item.errors || item.errors === 0,
+      'Did not specify errors for an invalid test',
+    );
 
-					assert(!message.fatal, `A fatal parsing error occurred: ${message.message}`);
+    const report = cli.executeOnText(item.code);
 
-					if (typeof error === "string") {
+    report.results.forEach((result) => {
+      compareErrorMessagesToExpected(result.messages, item.errors);
+    });
+  };
 
-						assert.strictEqual(message.message, error);
+  // testFile should have valid and invalid examples
 
-					} else {
+  describe(ruleName, () => {
+    describe('valid', () => {
+      testFile.valid.forEach((valid) => {
+        it(valid, () => {
+          testValidTemplate(valid);
+        });
+      });
+    });
 
-						// Message was an unexpected type
-						assert.fail(`Error should be a string, but found (${message})`);
-					}
-				}
-			}
-		}
-
-
-		// testFile should have valid and invalid examples
-
-		describe(ruleName, () => {
-			describe("valid", () => {
-				testFile.valid.forEach(valid => {
-					it(valid, () => {
-						testValidTemplate(valid);
-					});
-				});
-			});
-
-
-			describe("invalid", () => {
-				testFile.invalid.forEach(invalid => {
-					it(invalid.code, () => {
-						testInvalidTemplate(invalid);
-					});
-				});
-			});
-		});
-	}
+    describe('invalid', () => {
+      testFile.invalid.forEach((invalid) => {
+        it(invalid.code, () => {
+          testInvalidTemplate(invalid);
+        });
+      });
+    });
+  });
 };
 
-
-
-
-
-
+module.exports = configTester;

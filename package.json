@@ -4,7 +4,9 @@
   "description": "A tester for ESLint config files, similar to ESLint's Rule Tester for custom plugins",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write '**/*.{js,jsx}'",
+    "lint": "./node_modules/.bin/eslint '**/*.{js,jsx}'"
   },
   "author": "Agoric",
   "license": "Apache-2.0",
@@ -19,5 +21,28 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Agoric/eslint-config-jessie.git"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-prettier": "^3.0.0",
+    "eslint-plugin-react": "^7.11.1",
+    "husky": "^1.2.0",
+    "lint-staged": "^8.1.0",
+    "prettier": "1.15.3"
+  },
+  "lint-staged": {
+    "*.{js}": [
+      "prettier --write",
+      "eslint",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }

@@ -4,7 +4,9 @@
   "description": "A tester for ESLint config files, similar to ESLint's Rule Tester for custom plugins",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write '**/*.{js,jsx}'",
+    "lint": "./node_modules/.bin/eslint '**/*.{js,jsx}'"
   },
   "author": "Agoric",
   "license": "Apache-2.0",

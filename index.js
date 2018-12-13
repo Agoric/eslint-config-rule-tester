@@ -18,7 +18,7 @@ const configTester = (ruleName, configFile, testFile) => {
    * @returns {void}
    * @private
    */
-  const testValidTemplate = (text) => {
+  const testValidTemplate = text => {
     const report = cli.executeOnText(text);
     const errorCount = report.results.reduce(
       (count, result) => count + result.errorCount,
@@ -73,7 +73,7 @@ const configTester = (ruleName, configFile, testFile) => {
    * @returns {void}
    * @private
    */
-  const testInvalidTemplate = (item) => {
+  const testInvalidTemplate = item => {
     assert.ok(
       item.errors || item.errors === 0,
       'Did not specify errors for an invalid test',
@@ -81,7 +81,7 @@ const configTester = (ruleName, configFile, testFile) => {
 
     const report = cli.executeOnText(item.code);
 
-    report.results.forEach((result) => {
+    report.results.forEach(result => {
       compareErrorMessagesToExpected(result.messages, item.errors);
     });
   };
@@ -90,7 +90,7 @@ const configTester = (ruleName, configFile, testFile) => {
 
   describe(ruleName, () => {
     describe('valid', () => {
-      testFile.valid.forEach((valid) => {
+      testFile.valid.forEach(valid => {
         it(valid, () => {
           testValidTemplate(valid);
         });
@@ -98,7 +98,7 @@ const configTester = (ruleName, configFile, testFile) => {
     });
 
     describe('invalid', () => {
-      testFile.invalid.forEach((invalid) => {
+      testFile.invalid.forEach(invalid => {
         it(invalid.code, () => {
           testInvalidTemplate(invalid);
         });

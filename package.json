@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write '**/*.{js,jsx}'",
-    "lint": "./node_modules/.bin/eslint '**/*.{js,jsx}'"
+    "lint-fix": "eslint --fix '**/*.{js,jsx}'",
+    "lint-check": "eslint '**/*.{js,jsx}'"
   },
   "author": "Agoric",
   "license": "Apache-2.0",

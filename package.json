@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Agoric/eslint-config-jessie.git"
+    "url": "git+https://github.com/Agoric/eslint-config-rule-tester.git"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^17.1.0",

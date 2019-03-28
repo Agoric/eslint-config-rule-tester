@@ -28,7 +28,9 @@ const configTester = (ruleName, configFile, testFile) => {
     assert.strictEqual(
       errorCount,
       0,
-      `Should have no errors but had ${errorCount}:\n${report.results}`,
+      `Should have no errors but had ${errorCount}:\n${JSON.stringify(
+        report.results,
+      )}`,
     );
   };
 
@@ -38,7 +40,9 @@ const configTester = (ruleName, configFile, testFile) => {
   ) => {
     assert(
       typeof expectedErrorMsg === 'string',
-      `Error should be a string, but found (${expectedErrorMsg})`,
+      `Error should be a string, but found (${JSON.stringify(
+        expectedErrorMsg,
+      )})`,
     );
     assert(
       !actualErrorMsg.fatal,
@@ -56,7 +60,9 @@ const configTester = (ruleName, configFile, testFile) => {
       expectedErrorMsgs.length,
       `Should have ${expectedErrorMsgs.length} error${
         expectedErrorMsgs.length === 1 ? '' : 's'
-      } but had ${actualErrorMsgs.length}: \n${actualErrorMsgs}`,
+      } but had ${actualErrorMsgs.length}: \n${JSON.stringify(
+        actualErrorMsgs,
+      )}`,
     );
     actualErrorMsgs.forEach((_, index) =>
       compareSingleErrorMessageToExpected(

@@ -40,7 +40,9 @@ const configTester = (ruleName, configFile, testFile) => {
   ) => {
     assert(
       typeof expectedErrorMsg === 'string',
-      `Error should be a string, but found (${JSON.stringify(expectedErrorMsg)})`,
+      `Error should be a string, but found (${JSON.stringify(
+        expectedErrorMsg,
+      )})`,
     );
     assert(
       !actualErrorMsg.fatal,

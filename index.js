@@ -8,8 +8,8 @@
 const assert = require('assert');
 const eslint = require('eslint');
 
-const configTester = (ruleName, configFile, testFile) => {
-  const cli = new eslint.CLIEngine(configFile);
+const configTester = (ruleName, configObj, testFile) => {
+  const cli = new eslint.CLIEngine({ baseConfig: configObj });
 
   /**
    * Check if the template is valid or not

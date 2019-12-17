@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-rule-tester",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A tester for ESLint config files, similar to ESLint's Rule Tester for custom plugins",
   "main": "index.js",
   "scripts": {
@@ -29,5 +29,7 @@
     "eslint-plugin-prettier": "^3.1.1",
     "prettier": "^1.19.1"
   },
-  "files": ["index.js"]
+  "files": [
+    "index.js"
+  ]
 }

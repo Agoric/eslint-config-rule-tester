@@ -3,12 +3,14 @@ ESLint has a great utility for testing custom rules called [RuleTester](https://
 
 If you want to test a configuration file itself (especially more complex configurations, such as `no-restricted-syntax`), ESLint's RuleTester won't work very well, since you're not creating new rule files, just using ESLint's core rules. ConfigTester allows you to test a specific rule from your config file.
 
-
 ## Get Started
 
-ConfigTester takes in a `ruleName` (a string to be used when printing to the console), a `configFile` (a normal ESLint JavaScript config file), and a `testFile`, which has `valid` and `invalid` tests.
+ConfigTester takes in a `ruleName` (a string to be used when printing
+to the console), a `configObj` (a configuration in the form of a
+JavaScript object), and a `testFile`, which
+has `valid` and `invalid` tests.
 
-To isolate a certain rule for testing, make sure the `configFile` you pass in only contains the rule that you are testing under `rules`.
+To isolate a certain rule for testing, make sure the `configObj` you pass in only contains the rule that you are testing under `rules`.
 
 The `testFile` should look like this:
 

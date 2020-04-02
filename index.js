@@ -11,6 +11,10 @@ const eslint = require('eslint');
 const configTester = (ruleName, configObj, testFile) => {
   const cli = new eslint.CLIEngine({ baseConfig: configObj });
 
+  const msgToText = msg =>
+    `${msg.line},${msg.column}: ` +
+    `${msg.ruleId} - ${msg.message}`;
+
   /**
    * Check if the template is valid or not
    * all valid cases go through this
@@ -28,8 +32,10 @@ const configTester = (ruleName, configObj, testFile) => {
     assert.strictEqual(
       errorCount,
       0,
-      `Should have no errors but had ${errorCount}:\n${JSON.stringify(
-        report.results,
+      `Should have no errors but had ${errorCount}:\n${msgToText(
+        report.results.map(result =>
+          result.messages.map(msg => msgToText(msg)).join('\n'),
+        ),
       )}`,
     );
   };
@@ -48,7 +54,11 @@ const configTester = (ruleName, configObj, testFile) => {
       !actualErrorMsg.fatal,
       `A fatal parsing error occurred: ${actualErrorMsg.message}`,
     );
-    assert.strictEqual(actualErrorMsg, expectedErrorMsg);
+    assert.strictEqual(
+      actualErrorMsg,
+      expectedErrorMsg,
+      msgToText(actualErrorMsg),
+    );
   };
 
   const compareErrorMessagesToExpected = (
@@ -60,9 +70,9 @@ const configTester = (ruleName, configObj, testFile) => {
       expectedErrorMsgs.length,
       `Should have ${expectedErrorMsgs.length} error${
         expectedErrorMsgs.length === 1 ? '' : 's'
-      } but had ${actualErrorMsgs.length}: \n${JSON.stringify(
-        actualErrorMsgs,
-      )}`,
+      } but had ${actualErrorMsgs.length}: \n${actualErrorMsgs.map(msg =>
+        msgToText(msg),
+      ).join('\n')}`,
     );
     actualErrorMsgs.forEach((_, index) =>
       compareSingleErrorMessageToExpected(

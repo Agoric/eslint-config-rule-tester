@@ -105,6 +105,9 @@ const configTester = (ruleName, configObj, testFile) => {
 
     describe('invalid', () => {
       testFile.invalid.forEach(invalid => {
+        if (typeof invalid.code !== 'string') {
+          assert.fail('Did not specify errors for an invalid test');
+        }
         it(invalid.code, () => {
           testInvalidTemplate(invalid);
         });

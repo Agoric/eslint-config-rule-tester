@@ -64,10 +64,20 @@ const configTester = (ruleName, configObj, testFile) => {
         actualErrorMsgs,
       )}`,
     );
-    actualErrorMsgs.forEach((_, index) =>
+    const sortedExpectedErrorMsgs = expectedErrorMsgs.sort();
+    const sortedActualErrorMsgs = actualErrorMsgs.sort((a, b) => {
+      if (a.message < b.message) {
+        return -1;
+      }
+      if (a.message > b.message) {
+        return 1;
+      }
+      return 0;
+    });
+    sortedActualErrorMsgs.forEach((_, index) =>
       compareSingleErrorMessageToExpected(
-        actualErrorMsgs[index].message,
-        expectedErrorMsgs[index],
+        sortedActualErrorMsgs[index].message,
+        sortedExpectedErrorMsgs[index],
       ),
     );
   };

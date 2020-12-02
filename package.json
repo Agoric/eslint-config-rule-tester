@@ -15,18 +15,18 @@
     "eslintconfig"
   ],
   "dependencies": {
-    "eslint": "^6.7.2",
-    "mocha": "^6.2.2"
+    "eslint": "^6.8.0",
+    "mocha": "^6.2.3"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Agoric/eslint-config-rule-tester.git"
   },
   "devDependencies": {
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-prettier": "^6.7.0",
-    "eslint-plugin-import": "^2.19.1",
-    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.4",
     "prettier": "^1.19.1"
   },
   "files": [

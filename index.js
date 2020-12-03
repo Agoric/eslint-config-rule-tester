@@ -12,8 +12,7 @@ const configTester = (ruleName, configObj, testFile) => {
   const cli = new eslint.CLIEngine({ baseConfig: configObj });
 
   const msgToText = msg =>
-    `${msg.line},${msg.column}: ` +
-    `${msg.ruleId} - ${msg.message}`;
+    `${msg.line},${msg.column}: ${msg.ruleId} - ${msg.message}`;
 
   /**
    * Check if the template is valid or not
@@ -70,9 +69,9 @@ const configTester = (ruleName, configObj, testFile) => {
       expectedErrorMsgs.length,
       `Should have ${expectedErrorMsgs.length} error${
         expectedErrorMsgs.length === 1 ? '' : 's'
-      } but had ${actualErrorMsgs.length}: \n${actualErrorMsgs.map(msg =>
-        msgToText(msg),
-      ).join('\n')}`,
+      } but had ${actualErrorMsgs.length}: \n${actualErrorMsgs
+        .map(msg => msgToText(msg))
+        .join('\n')}`,
     );
     const sortedExpectedErrorMsgs = expectedErrorMsgs.sort();
     const sortedActualErrorMsgs = actualErrorMsgs.sort((a, b) => {

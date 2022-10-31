@@ -11,7 +11,7 @@ const eslint = require('eslint');
 const configTester = (ruleName, configObj, testFile) => {
   const cli = new eslint.CLIEngine({ baseConfig: configObj });
 
-  const msgToText = msg =>
+  const msgToText = (msg) =>
     `${msg.line},${msg.column}: ${msg.ruleId} - ${msg.message}`;
 
   /**
@@ -21,7 +21,7 @@ const configTester = (ruleName, configObj, testFile) => {
    * @returns {void}
    * @private
    */
-  const testValidTemplate = text => {
+  const testValidTemplate = (text) => {
     const report = cli.executeOnText(text);
     const errorCount = report.results.reduce(
       (count, result) => count + result.errorCount,
@@ -32,8 +32,8 @@ const configTester = (ruleName, configObj, testFile) => {
       errorCount,
       0,
       `Should have no errors but had ${errorCount}:\n${msgToText(
-        report.results.map(result =>
-          result.messages.map(msg => msgToText(msg)).join('\n'),
+        report.results.map((result) =>
+          result.messages.map((msg) => msgToText(msg)).join('\n'),
         ),
       )}`,
     );
@@ -70,7 +70,7 @@ const configTester = (ruleName, configObj, testFile) => {
       `Should have ${expectedErrorMsgs.length} error${
         expectedErrorMsgs.length === 1 ? '' : 's'
       } but had ${actualErrorMsgs.length}: \n${actualErrorMsgs
-        .map(msg => msgToText(msg))
+        .map((msg) => msgToText(msg))
         .join('\n')}`,
     );
     const sortedExpectedErrorMsgs = expectedErrorMsgs.sort();
@@ -98,7 +98,7 @@ const configTester = (ruleName, configObj, testFile) => {
    * @returns {void}
    * @private
    */
-  const testInvalidTemplate = item => {
+  const testInvalidTemplate = (item) => {
     assert.ok(
       item.errors || item.errors === 0,
       'Did not specify errors for an invalid test',
@@ -106,7 +106,7 @@ const configTester = (ruleName, configObj, testFile) => {
 
     const report = cli.executeOnText(item.code);
 
-    report.results.forEach(result => {
+    report.results.forEach((result) => {
       compareErrorMessagesToExpected(result.messages, item.errors);
     });
   };
@@ -115,7 +115,7 @@ const configTester = (ruleName, configObj, testFile) => {
 
   describe(ruleName, () => {
     describe('valid', () => {
-      testFile.valid.forEach(valid => {
+      testFile.valid.forEach((valid) => {
         it(valid, () => {
           testValidTemplate(valid);
         });
@@ -123,7 +123,7 @@ const configTester = (ruleName, configObj, testFile) => {
     });
 
     describe('invalid', () => {
-      testFile.invalid.forEach(invalid => {
+      testFile.invalid.forEach((invalid) => {
         if (typeof invalid.code !== 'string') {
           assert.fail('Did not specify errors for an invalid test');
         }

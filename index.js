@@ -6,24 +6,21 @@
  */
 
 const assert = require('assert');
-const eslint = require('eslint');
 
-const configTester = (ruleName, configObj, testFile) => {
-  const cli = new eslint.CLIEngine({ baseConfig: configObj });
-
+const configTester = (ruleName, cli, testFile) => {
   const msgToText = (msg) =>
     `${msg.line},${msg.column}: ${msg.ruleId} - ${msg.message}`;
 
   /**
    * Check if the template is valid or not
    * all valid cases go through this
-   * @param {string} text to run the rule against
+   * @param {{code: string, [options]: *}} item to run the rule against
    * @returns {void}
    * @private
    */
-  const testValidTemplate = (text) => {
-    const report = cli.executeOnText(text);
-    const errorCount = report.results.reduce(
+  const testValidTemplate = async (item) => {
+    const results = await cli.lintText(item.code, item.options);
+    const errorCount = results.reduce(
       (count, result) => count + result.errorCount,
       0,
     );
@@ -32,7 +29,7 @@ const configTester = (ruleName, configObj, testFile) => {
       errorCount,
       0,
       `Should have no errors but had ${errorCount}:\n${msgToText(
-        report.results.map((result) =>
+        results.map((result) =>
           result.messages.map((msg) => msgToText(msg)).join('\n'),
         ),
       )}`,
@@ -64,6 +61,18 @@ const configTester = (ruleName, configObj, testFile) => {
     actualErrorMsgs,
     expectedErrorMsgs,
   ) => {
+    if (typeof expectedErrorMsgs === "number") {
+      assert.strictEqual(
+          actualErrorMsgs.length,
+          expectedErrorMsgs,
+          `Should have ${expectedErrorMsgs} error${
+              expectedErrorMsgs === 1 ? '' : 's'
+          } but had ${actualErrorMsgs.length}: \n${actualErrorMsgs
+              .map((msg) => msgToText(msg))
+              .join('\n')}`,
+      );
+      return
+    }
     assert.strictEqual(
       actualErrorMsgs.length,
       expectedErrorMsgs.length,
@@ -98,15 +107,15 @@ const configTester = (ruleName, configObj, testFile) => {
    * @returns {void}
    * @private
    */
-  const testInvalidTemplate = (item) => {
+  const testInvalidTemplate = async (item) => {
     assert.ok(
       item.errors || item.errors === 0,
       'Did not specify errors for an invalid test',
     );
 
-    const report = cli.executeOnText(item.code);
+    const results = await cli.lintText(item.code);
 
-    report.results.forEach((result) => {
+    results.forEach((result) => {
       compareErrorMessagesToExpected(result.messages, item.errors);
     });
   };
@@ -116,9 +125,8 @@ const configTester = (ruleName, configObj, testFile) => {
   describe(ruleName, () => {
     describe('valid', () => {
       testFile.valid.forEach((valid) => {
-        it(valid, () => {
-          testValidTemplate(valid);
-        });
+        const item = typeof valid === 'string' ? { code: valid } : valid;
+        it(item.code, () => testValidTemplate(item));
       });
     });
 
@@ -127,9 +135,7 @@ const configTester = (ruleName, configObj, testFile) => {
         if (typeof invalid.code !== 'string') {
           assert.fail('Did not specify errors for an invalid test');
         }
-        it(invalid.code, () => {
-          testInvalidTemplate(invalid);
-        });
+        it(invalid.code, () => testInvalidTemplate(invalid));
       });
     });
   });

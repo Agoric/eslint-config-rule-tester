@@ -6,11 +6,10 @@ If you want to test a configuration file itself (especially more complex configu
 ## Get Started
 
 ConfigTester takes in a `ruleName` (a string to be used when printing
-to the console), a `configObj` (a configuration in the form of a
-JavaScript object), and a `testFile`, which
-has `valid` and `invalid` tests.
+to the console), an `eslint` instance, and a `testFile`, which has `valid`
+and `invalid` tests.
 
-To isolate a certain rule for testing, make sure the `configObj` you pass in only contains the rule that you are testing under `rules`.
+To isolate a certain rule for testing, make sure the `configObj` you pass to your eslint instance under `rules`.
 
 The `testFile` should look like this:
 
